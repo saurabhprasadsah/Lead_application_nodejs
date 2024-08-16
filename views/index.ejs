@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/styles.css">
+  <title>Lead Management</title>
+</head>
+<body>
+  <h1>Lead Management</h1>
+
+  <form action="/leads/create" method="POST" onsubmit="return validateForm()">
+    <input type="email" id="emailId" name="emailId" placeholder="Email ID" required>
+    <input type="text" id="name" name="name" placeholder="Name" required>
+    <input type="text" id="number" name="number" placeholder="Phone Number" required>
+    <select name="product" required>
+      <option value="A">Product A</option>
+      <option value="B">Product B</option>
+      <option value="C">Product C</option>
+    </select>
+    <button type="submit">Create Lead</button>
+  </form>
+
+  <hr>
+
+  <form method="GET">
+    <input type="text" name="search" placeholder="Search by name or email">
+    <select name="sort">
+      <option value="">Sort by</option>
+      <option value="name">Name</option>
+      <option value="emailId">Email ID</option>
+    </select>
+    <button type="submit">Search & Sort</button>
+  </form>
+
+  <ul>
+    <% leads.forEach(lead => { %>
+      <li>
+        <strong>Name:</strong> <%= lead.name %>,
+        <strong>Email:</strong> <%= lead.emailId %>,
+        <strong>Phone:</strong> <%= lead.number %>,
+        <strong>Product:</strong> <%= lead.product %>
+        <form action="/leads/update/<%= lead._id %>" method="POST" style="display:inline;" onsubmit="return validateForm()">
+          <input type="text" name="name" value="<%= lead.name %>">
+          <input type="email" name="emailId" value="<%= lead.emailId %>">
+          <input type="text" name="number" value="<%= lead.number %>">
+          <select name="product">
+            <option value="A" <%= lead.product === 'A' ? 'selected' : '' %>>Product A</option>
+            <option value="B" <%= lead.product === 'B' ? 'selected' : '' %>>Product B</option>
+            <option value="C" <%= lead.product === 'C' ? 'selected' : '' %>>Product C</option>
+          </select>
+          <button type="submit">Update</button>
+        </form>
+        <form action="/leads/delete/<%= lead._id %>" method="POST" style="display:inline;">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+
+  <!-- <script>
+    function validateForm() {
+      const email = document.getElementById('emailId').value;
+      const number = document.getElementById('number').value;
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      const phonePattern = /^\d{10}$/;
+
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+        return false;
+      }
+    
+      if (!phonePattern.test(number)) {
+        alert('Please enter a valid 10-digit phone number.');
+        return false;
+      }
+
+      return true;
+    }
+  </script> -->
+</body>
+</html>
